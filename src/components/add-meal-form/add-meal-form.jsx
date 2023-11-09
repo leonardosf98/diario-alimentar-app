@@ -1,20 +1,19 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
-function Modal({ onSubmit }) {
-  const today = new Date().toJSON().slice(0, 10);
+import "./add-meal-form.css";
+function AddMealForm({ onSubmit }) {
+  const todayDate = new Date().toJSON().slice(0, 10);
+  const todayTime = new Date().toJSON().slice(11, 16);
   const [mealName, setMealName] = useState("");
-  const [mealDate, setMealDate] = useState(today);
-  const [mealQuantity, setMealQuantity] = useState(12);
-  const [liquidFood, setLiquidFood] = useState();
-  const [solidFood, setSolidFood] = useState();
+  const [mealDate, setMealDate] = useState(todayDate);
+  const [mealTime, setMealTime] = useState(todayTime);
 
   return (
     <div className="modal">
       <Link to="/">Voltar</Link>
       <form
         onSubmit={(event) => {
-          onSubmit({ mealName, mealDate, mealQuantity });
+          onSubmit({ mealName, mealDate, mealTime });
         }}
       >
         <fieldset>
@@ -42,40 +41,22 @@ function Modal({ onSubmit }) {
           />
         </fieldset>
         <fieldset>
-          <label for="solid"> Sólido</label>
+          <label for="date">Selecione o horário da refeição</label>
           <input
-            type="radio"
-            name="solid"
-            id="solid"
+            type="time"
+            name="time"
+            id="time"
+            value={mealTime}
             onChange={(event) => {
-              setSolidFood(event.target.checked);
-            }}
-          />
-          <label for="liquid">Líquido</label>
-          <input
-            type="radio"
-            name="liquid"
-            id="liquid"
-            checked
-            onChange={(event) => {
-              setLiquidFood(event.target.checked);
-            }}
-          />
-          <label>Digite a quantidade em </label>
-          <input
-            type="number"
-            name="quantity"
-            id="quantity"
-            value={mealQuantity}
-            onChange={(event) => {
-              setMealQuantity(event.target.value);
+              setMealTime(event.target.value);
             }}
           />
         </fieldset>
+        <Link to={"/addFood"}>Adicionar alimento</Link>
         <button type="submit">Cadastrar</button>
       </form>
     </div>
   );
 }
 
-export default Modal;
+export default AddMealForm;

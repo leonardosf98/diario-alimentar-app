@@ -1,18 +1,15 @@
-import Modal from "../../components/modal/modal";
+import AddMealForm from "../../components/add-meal-form/add-meal-form";
 import { useNavigate } from "react-router-dom";
 function CreateMeal() {
   const navigate = useNavigate();
   return (
-    <Modal
+    <AddMealForm
       onSubmit={(event) => {
+        console.log(event);
         navigate("/");
       }}
-    ></Modal>
+    ></AddMealForm>
   );
 }
-/*
-Definir estados para cada campo
-Passar para onSubmit como objeto os estados
-Criar um estadoNovo de lista para ir mostrando
-*/
+
 export default CreateMeal;
