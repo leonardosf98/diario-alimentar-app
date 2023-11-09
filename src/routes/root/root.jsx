@@ -6,7 +6,7 @@ import AddMealButton from "../../components/add-meal-button/add-meal-button.jsx"
 
 function Root() {
   return (
-    <div className="app">
+    <div>
       <Header />
       <MealList />
       <AddMealButton />
