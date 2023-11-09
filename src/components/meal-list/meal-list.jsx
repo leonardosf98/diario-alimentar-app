@@ -1,10 +1,9 @@
+import { useState } from "react";
 import "./meal-list.css";
+
 function MealList() {
-  let meals = [];
-  if (meals.length === 0) {
-    meals = <li>Nenhuma refeição cadastrada</li>;
-  } else {
-  }
+  const [meals, setMeals] = useState("Nenhuma refeição cadastrada");
+
   return (
     <div>
       <h2>Refeições</h2>

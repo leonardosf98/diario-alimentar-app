@@ -1,13 +1,10 @@
 import "./add-meal-button.css";
+import { Link } from "react-router-dom";
 
 function AddMealButton() {
-  const showModal = () => {
-    
-  };
   return (
-    <button className="add-meal-button" onClick={showModal}>
-      Adicionar refeição
-    </button>
+    // <button className="add-meal-button">Adicionar refeição</button>;
+    <Link to={"/createMeal"}>Adicionar refeição</Link>
   );
 }
 
