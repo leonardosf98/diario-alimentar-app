@@ -8,7 +8,7 @@ Why are you requesting this solution?
 
 ## **How?**
 
-How did you implemented the solution?
+How did you implement the solution?
 
 ## **Close**
 
