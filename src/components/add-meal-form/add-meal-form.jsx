@@ -1,13 +1,26 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./add-meal-form.css";
-function AddMealForm({ onSubmit }) {
+
+function AddMealForm({ handleButtonClick }) {
   const todayDate = new Date().toJSON().slice(0, 10);
   const todayTime = new Date().toJSON().slice(11, 16);
   const [mealName, setMealName] = useState("");
   const [mealDate, setMealDate] = useState(todayDate);
   const [mealTime, setMealTime] = useState(todayTime);
+  const [foods, setAFoods] = useState([]);
 
+  const addFood = () => {
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const foodName = searchParams.get("foodName");
+    const foodQuantity = searchParams.get("quantity");
+    const foodType = searchParams.get("option");
+    setAFoods([foodName, foodQuantity, foodType]);
+  };
+  if (foods.length === 0) {
+    setAFoods("Nenhum alimento cadastrado");
+  }
   return (
     <div className="modal">
       <Link to="/">Voltar</Link>

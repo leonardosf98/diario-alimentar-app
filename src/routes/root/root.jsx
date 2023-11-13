@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Header from "../../components/header/header.jsx";
 import "./root.css";
 import MealList from "../../components/meal-list/meal-list.jsx";

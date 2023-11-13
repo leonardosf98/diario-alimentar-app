@@ -1,9 +1,15 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import addFood from "../../components/add-meal-form/add-meal-form";
 function AddFood() {
   const [option, setOption] = useState("solid");
   const [measureUnit, setMeasureUnit] = useState("gramas");
   const [foodName, setFoodName] = useState("");
   const [mealQuantity, setMealQuantity] = useState();
+
+  const handleButtonClick = () => {
+    addFood();
+  };
 
   function handleOptionChange() {
     if (option === "solid") {
@@ -12,8 +18,10 @@ function AddFood() {
       setMeasureUnit("gramas");
     }
   }
+
   return (
     <div>
+      <Link to={"/createMeal"}>Voltar</Link>
       <form>
         <fieldset>
           <label for="foodName">Digite o nome do alimento: </label>
@@ -63,7 +71,12 @@ function AddFood() {
             }}
           />
         </fieldset>
-        <button type="submit">Cadastrar alimento</button>
+        <Link
+          onClick={handleButtonClick}
+          to={`/createMeal?foodName=${foodName}&quantity=${mealQuantity}&option=${option}`}
+        >
+          Cadastrar alimento
+        </Link>
       </form>
     </div>
   );

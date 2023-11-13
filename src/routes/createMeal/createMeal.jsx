@@ -5,7 +5,6 @@ function CreateMeal() {
   return (
     <AddMealForm
       onSubmit={(event) => {
-        console.log(event);
         navigate("/");
       }}
     ></AddMealForm>
