@@ -1,37 +1,38 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./add-meal-form.css";
+import AddMealItem from "../addMealItem/addMealItem";
 
-function AddMealForm({ handleButtonClick }) {
+function AddMealForm({ onMealSubmit }) {
   const todayDate = new Date().toJSON().slice(0, 10);
   const todayTime = new Date().toJSON().slice(11, 16);
   const [mealName, setMealName] = useState("");
   const [mealDate, setMealDate] = useState(todayDate);
   const [mealTime, setMealTime] = useState(todayTime);
-  const [foods, setAFoods] = useState([]);
+  const [mealItem, setMealItem] = useState([]);
 
-  const addFood = () => {
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    const foodName = searchParams.get("foodName");
-    const foodQuantity = searchParams.get("quantity");
-    const foodType = searchParams.get("option");
-    setAFoods([foodName, foodQuantity, foodType]);
+  const handleItemSubmit = (event, mealItemData) => {
+    event.preventDefault();
+    const newItem = {
+      itemName: mealItemData[0],
+      measureUnit: mealItemData[1],
+      quantity: mealItemData[2],
+    };
+    setMealItem((oldState) => [...oldState, newItem]);
   };
-  if (foods.length === 0) {
-    setAFoods("Nenhum alimento cadastrado");
-  }
+
   return (
     <div className="modal">
       <Link to="/">Voltar</Link>
       <form
         onSubmit={(event) => {
-          onSubmit({ mealName, mealDate, mealTime });
+          event.preventDefault();
+          onMealSubmit({ mealName, mealDate, mealTime, mealItem });
         }}
       >
         <fieldset>
-          <label for="meal-name">Digite o nome da refeição</label>
-          <input
+          <label htmlFor="meal-name">Digite o nome da refeição</label>
+          <select
             type="text"
             name="meal-name"
             id="meal-name"
@@ -39,10 +40,16 @@ function AddMealForm({ handleButtonClick }) {
             onChange={(event) => {
               setMealName(event.target.value);
             }}
-          />
+          >
+            <option value="">Café da manhã</option>
+            <option value="">Lanche</option>
+            <option value="">Almoço</option>
+            <option value="">Jantar</option>
+            <option value="">Ceia</option>
+          </select>
         </fieldset>
         <fieldset>
-          <label for="date">Selecione a data da refeição</label>
+          <label htmlFor="date">Selecione a data da refeição</label>
           <input
             type="date"
             name="date"
@@ -54,7 +61,7 @@ function AddMealForm({ handleButtonClick }) {
           />
         </fieldset>
         <fieldset>
-          <label for="date">Selecione o horário da refeição</label>
+          <label htmlFor="date">Selecione o horário da refeição</label>
           <input
             type="time"
             name="time"
@@ -65,7 +72,12 @@ function AddMealForm({ handleButtonClick }) {
             }}
           />
         </fieldset>
-        <Link to={"/addFood"}>Adicionar alimento</Link>
+        {mealItem.map((item) => {
+          return (
+            <div>{`${item.itemName}: ${item.quantity} ${item.measureUnit}`}</div>
+          );
+        })}
+        <AddMealItem onItemSubmit={handleItemSubmit}></AddMealItem>
         <button type="submit">Cadastrar</button>
       </form>
     </div>
