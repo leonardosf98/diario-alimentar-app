@@ -6,6 +6,7 @@ import AddMealItem from "../addMealItem/addMealItem";
 function AddMealForm({ onMealSubmit }) {
   const todayDate = new Date().toJSON().slice(0, 10);
   const todayTime = new Date().toJSON().slice(11, 16);
+  // TODO: Refatorar os estados para centralizar em um objeto só
   const [mealName, setMealName] = useState("");
   const [mealDate, setMealDate] = useState(todayDate);
   const [mealTime, setMealTime] = useState(todayTime);
