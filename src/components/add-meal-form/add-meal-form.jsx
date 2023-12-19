@@ -7,6 +7,7 @@ import Header from "../header/header";
 function AddMealForm({ onMealSubmit }) {
   const todayDate = new Date().toLocaleString("pt-br").slice(0, 10);
   const todayTime = new Date().toLocaleString("pt-br").slice(12, 17);
+  // TODO: Refatorar os estados para centralizar em um objeto só
   const [mealName, setMealName] = useState("Café da manhã");
   const [mealDate, setMealDate] = useState(
     `${todayDate.slice(6, 10)}-${todayDate.slice(3, 5)}-${todayDate.slice(
