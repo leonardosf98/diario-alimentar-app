@@ -2,16 +2,7 @@ import { useState } from "react";
 
 function AddMealItem({ onItemSubmit }) {
   const foodTypes = ["Leguminosas", "Frutas", "Cereais", "Hortaliças"];
-  /* const [initial, setInitial] = {
-    measureUnit: "gramas",
-    itemType: "",
-    itemName: "Feijão"
-    itemOptions: ["Feijão","Ervilha","Lentilha","Grão de bico"],
-    itemQuantity: undefined,
-    error: false,
-    foodTypes:["Leguminosas","Frutas","Cereais","Hortaliças"]
-    };
-    */
+
   const [measureUnit, setMeasureUnit] = useState("gramas");
   const [itemType, setItemType] = useState("");
   const [itemName, setItemName] = useState("Feijão");
