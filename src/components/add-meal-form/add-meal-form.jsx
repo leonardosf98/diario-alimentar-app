@@ -1,15 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./add-meal-form.css";
 import AddMealItem from "../addMealItem/addMealItem";
+import Header from "../header/header";
 
 function AddMealForm({ onMealSubmit }) {
-  const todayDate = new Date().toJSON().slice(0, 10);
-  const todayTime = new Date().toJSON().slice(11, 16);
-  const [mealName, setMealName] = useState("");
-  const [mealDate, setMealDate] = useState(todayDate);
+  const todayDate = new Date().toLocaleString("pt-br").slice(0, 10);
+  const todayTime = new Date().toLocaleString("pt-br").slice(12, 17);
+  const [mealName, setMealName] = useState("Café da manhã");
+  const [mealDate, setMealDate] = useState(
+    `${todayDate.slice(6, 10)}-${todayDate.slice(3, 5)}-${todayDate.slice(
+      0,
+      2
+    )}`
+  );
   const [mealTime, setMealTime] = useState(todayTime);
   const [mealItem, setMealItem] = useState([]);
+  const [error, setError] = useState(false);
 
   const handleItemSubmit = (event, mealItemData) => {
     event.preventDefault();
@@ -20,18 +27,28 @@ function AddMealForm({ onMealSubmit }) {
     };
     setMealItem((oldState) => [...oldState, newItem]);
   };
-
+  useEffect(() => {
+    setError(mealItem.length === 0);
+  }, [mealItem]);
   return (
-    <div className="modal">
+    <div>
+      <Header />
       <Link to="/">Voltar</Link>
       <form
+        className="form"
         onSubmit={(event) => {
           event.preventDefault();
-          onMealSubmit({ mealName, mealDate, mealTime, mealItem });
+          if (mealItem.length === 0) {
+            setError(true);
+            return;
+          } else {
+            onMealSubmit({ mealName, mealDate, mealTime, mealItem });
+            console.log(mealItem);
+          }
         }}
       >
         <fieldset>
-          <label htmlFor="meal-name">Digite o nome da refeição</label>
+          <label htmlFor="meal-name">Selecione o nome da refeição: </label>
           <select
             type="text"
             name="meal-name"
@@ -41,15 +58,15 @@ function AddMealForm({ onMealSubmit }) {
               setMealName(event.target.value);
             }}
           >
-            <option value="">Café da manhã</option>
-            <option value="">Lanche</option>
-            <option value="">Almoço</option>
-            <option value="">Jantar</option>
-            <option value="">Ceia</option>
+            <option value="Café da manhã">Café da manhã</option>
+            <option value="Lanche">Lanche</option>
+            <option value="Almoço">Almoço</option>
+            <option value="Jantar">Jantar</option>
+            <option value="Ceia">Ceia</option>
           </select>
         </fieldset>
         <fieldset>
-          <label htmlFor="date">Selecione a data da refeição</label>
+          <label htmlFor="date">Selecione a data da refeição: </label>
           <input
             type="date"
             name="date"
@@ -61,7 +78,7 @@ function AddMealForm({ onMealSubmit }) {
           />
         </fieldset>
         <fieldset>
-          <label htmlFor="date">Selecione o horário da refeição</label>
+          <label htmlFor="date">Selecione o horário da refeição: </label>
           <input
             type="time"
             name="time"
@@ -72,13 +89,16 @@ function AddMealForm({ onMealSubmit }) {
             }}
           />
         </fieldset>
-        {mealItem.map((item) => {
-          return (
-            <div>{`${item.itemName}: ${item.quantity} ${item.measureUnit}`}</div>
-          );
-        })}
+        <div className="meal-item-container">
+          {mealItem.map((item) => {
+            return (
+              <div className="meal-item">{`${item.itemName}: ${item.quantity} ${item.measureUnit}`}</div>
+            );
+          })}
+        </div>
+        {error && <p>Você deve registrar pelo menos um alimento</p>}
         <AddMealItem onItemSubmit={handleItemSubmit}></AddMealItem>
-        <button type="submit">Cadastrar</button>
+        <button type="submit">Cadastrar Refeição</button>
       </form>
     </div>
   );

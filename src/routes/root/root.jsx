@@ -1,24 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../components/header/header.jsx";
+import { Link } from "react-router-dom";
+
 import "./root.css";
 import MealList from "../../components/meal-list/meal-list.jsx";
-import AddMealButton from "../../components/add-meal-button/add-meal-button.jsx";
 function Root() {
   const [meals, setMeals] = useState([]);
-  if (meals.length === 0) {
-    setMeals("Nenhuma refeição cadastrada");
+  const [loading, setLoading] = useState(true);
+  let mealsLS = localStorage.getItem("meals");
+  if (mealsLS) {
+    useEffect(() => {
+      setLoading(false);
+      let parsedMeals = JSON.parse(mealsLS);
+      setMeals(parsedMeals);
+    }, []);
+  } else {
+    mealsLS = localStorage.setItem("meals", "[]");
   }
-
   const addMeal = (mealData) => {
-    console.log(1);
     setMeals((oldstate) => [...oldstate, mealData]);
   };
-
-  return (
+  return loading ? (
+    <p>Carregando</p>
+  ) : (
     <div>
       <Header />
       <MealList meals={meals} />
-      <AddMealButton onMealSubmit={addMeal} />
+      <Link to={"/createMeal"} onAddMeal={addMeal}>
+        Adicionar refeição
+      </Link>
     </div>
   );
 }

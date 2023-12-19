@@ -1,7 +1,17 @@
 import { useState } from "react";
 
 function AddMealItem({ onItemSubmit }) {
-  const [option, setOption] = useState("solid");
+  const foodTypes = ["Leguminosas", "Frutas", "Cereais", "Hortaliças"];
+  /* const [initial, setInitial] = {
+    measureUnit: "gramas",
+    itemType: "",
+    itemName: "Feijão"
+    itemOptions: ["Feijão","Ervilha","Lentilha","Grão de bico"],
+    itemQuantity: undefined,
+    error: false,
+    foodTypes:["Leguminosas","Frutas","Cereais","Hortaliças"]
+    };
+    */
   const [measureUnit, setMeasureUnit] = useState("gramas");
   const [itemType, setItemType] = useState("");
   const [itemName, setItemName] = useState("Feijão");
@@ -12,9 +22,9 @@ function AddMealItem({ onItemSubmit }) {
     "Grão de bico",
   ]);
   const [mealQuantity, setMealQuantity] = useState();
-
+  const [error, setError] = useState(false);
   const handleOptionChange = () => {
-    if (option === "solid") {
+    if (measureUnit === "gramas") {
       setMeasureUnit("ml's");
     } else {
       setMeasureUnit("gramas");
@@ -26,15 +36,19 @@ function AddMealItem({ onItemSubmit }) {
     switch (type) {
       case 1:
         setItemOptions(["Feijão", "Ervilha", "Lentilha", "Grão de bico"]);
-        break;
-      case 2:
-        setItemOptions(["Arroz", "Aveia", "Milho", "Brócolis"]);
+        setItemName("Feijão");
         break;
       case 3:
+        setItemOptions(["Arroz", "Aveia", "Milho", "Brócolis"]);
+        setItemName("Arroz");
+        break;
+      case 2:
         setItemOptions(["Maçã", "Banana", "Mamão", "Uva"]);
+        setItemName("Maçã");
         break;
       case 4:
         setItemOptions(["Alface", "Tomate", "Cenoura", "Brócolis"]);
+        setItemName("Alface");
         break;
     }
   };
@@ -54,10 +68,13 @@ function AddMealItem({ onItemSubmit }) {
               handleTypeChange(event);
             }}
           >
-            <option value="1">Leguminosas</option>
-            <option value="2">Cereais</option>
-            <option value="3">Frutas</option>
-            <option value="4">Hortaliças</option>
+            {foodTypes.map((item, index) => {
+              return (
+                <option key={index} value={index + 1}>
+                  {item}
+                </option>
+              );
+            })}
           </select>
         </fieldset>
         <fieldset>
@@ -68,6 +85,7 @@ function AddMealItem({ onItemSubmit }) {
             value={itemName}
             onChange={(event) => {
               setItemName(event.target.value);
+              setError(false);
             }}
           >
             {itemOptions.map((option) => {
@@ -79,32 +97,32 @@ function AddMealItem({ onItemSubmit }) {
             })}
           </select>
         </fieldset>
-        <fieldset>
-          <label htmlFor="solid"> Sólido</label>
+        <fieldset className="meal-quantity-container">
+          <label htmlFor="gramas"> Sólido</label>
           <input
             type="radio"
-            name="solid"
-            id="solid"
-            value="solid"
-            checked={option === "solid"}
+            name="gramas"
+            id="gramas"
+            value="gramas"
+            checked={measureUnit === "gramas"}
             onChange={(event) => {
-              setOption(event.target.value);
+              setMeasureUnit(event.target.value);
               handleOptionChange();
             }}
           />
           <label htmlFor="liquid">Líquido</label>
           <input
             type="radio"
-            name="liquid"
-            id="liquid"
-            value="liquid"
-            checked={option === "liquid"}
+            name="ml's"
+            id="ml's"
+            value="ml's"
+            checked={measureUnit === "ml's"}
             onChange={(event) => {
-              setOption(event.target.value);
+              setMeasureUnit(event.target.value);
               handleOptionChange();
             }}
           />
-          <label>Digite a quantidade em {measureUnit}</label>
+          <label>Digite a quantidade em {measureUnit}: </label>
           <input
             type="number"
             name="quantity"
@@ -112,12 +130,20 @@ function AddMealItem({ onItemSubmit }) {
             value={mealQuantity}
             onChange={(event) => {
               setMealQuantity(event.target.value);
+              {
+                mealQuantity <= 0 ? setError(true) : setError(false);
+              }
             }}
           />
+          {error && <div>Digite um valor válido</div>}
         </fieldset>
         <button
           onClick={(event) => {
             event.preventDefault();
+            if (!mealQuantity) {
+              setError(true);
+              return;
+            }
             const newItem = onSubmit();
             onItemSubmit(event, newItem);
           }}
