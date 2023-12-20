@@ -1,4 +1,5 @@
 import "./meal-list.css";
+import { Link } from "react-router-dom";
 
 function MealList({ meals }) {
   if (meals.length === 0) {
@@ -14,6 +15,7 @@ function MealList({ meals }) {
                 <h3>{item.mealName}</h3>
                 <p>Horário: {item.mealTime}</p>
                 <p>Data: {item.mealDate}</p>
+                <Link to={`/edit/${item.id}`}>Editar</Link>
               </li>
             );
           })}

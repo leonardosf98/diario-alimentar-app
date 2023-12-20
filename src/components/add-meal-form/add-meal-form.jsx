@@ -5,15 +5,16 @@ import AddMealItem from "../addMealItem/addMealItem";
 import Header from "../header/header";
 
 function AddMealForm({ onMealSubmit }) {
-  const todayDate = new Date().toLocaleString("pt-br").slice(0, 10);
+  const todayDate = {
+    day: new Date().toLocaleString("pt-br").slice(0, 2),
+    month: new Date().toLocaleString("pt-br").slice(3, 5),
+    year: new Date().toLocaleString("pt-br").slice(6, 10),
+  };
+
   const todayTime = new Date().toLocaleString("pt-br").slice(12, 17);
-  // TODO: Refatorar os estados para centralizar em um objeto só
   const [mealName, setMealName] = useState("Café da manhã");
   const [mealDate, setMealDate] = useState(
-    `${todayDate.slice(6, 10)}-${todayDate.slice(3, 5)}-${todayDate.slice(
-      0,
-      2
-    )}`
+    `${todayDate.year}-${todayDate.month}-${todayDate.day}`
   );
   const [mealTime, setMealTime] = useState(todayTime);
   const [mealItem, setMealItem] = useState([]);
@@ -97,7 +98,11 @@ function AddMealForm({ onMealSubmit }) {
             );
           })}
         </div>
-        {error && <p>Você deve registrar pelo menos um alimento</p>}
+        {error && (
+          <p className="error-msg">
+            Você deve registrar pelo menos um alimento
+          </p>
+        )}
         <AddMealItem onItemSubmit={handleItemSubmit}></AddMealItem>
         <button type="submit">Cadastrar Refeição</button>
       </form>

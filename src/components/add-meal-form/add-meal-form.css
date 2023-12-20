@@ -33,3 +33,6 @@ form {
   display: flex;
   flex-direction: column;
 }
+.error-msg {
+  background-color: red;
+}

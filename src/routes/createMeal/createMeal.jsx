@@ -6,10 +6,6 @@ function CreateMeal() {
   return (
     <AddMealForm
       onMealSubmit={(mealData) => {
-        // mealData.mealDate = `${mealData.mealDate.slice(
-        //   0,
-        //   3
-        // )}/${mealData.mealData.slice(5, 6)}/${mealData.mealDate.slice(8, 9)}`;
         let meals = localStorage.getItem("meals");
         if (!meals) {
           localStorage.setItem("meals", "[]");
