@@ -1,120 +1,35 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import "./addMealItem.css";
+import FoodSelector from "../food-selector/food-selector";
 function AddMealItem({ onItemSubmit }) {
-  const foodTypes = ["Leguminosas", "Frutas", "Cereais", "Hortaliças"];
-
-  const [measureUnit, setMeasureUnit] = useState("gramas");
-  const [itemType, setItemType] = useState("");
-  const [itemName, setItemName] = useState("Feijão");
-  const [itemOptions, setItemOptions] = useState([
-    "Feijão",
-    "Ervilha",
-    "Lentilha",
-    "Grão de bico",
-  ]);
+  const [itemType, setItemType] = useState(0);
+  const [itemName, setItemName] = useState();
+  const [foodTypes, setFoodTypes] = useState([]);
+  const [itemOptions, setItemOptions] = useState([]);
   const [mealQuantity, setMealQuantity] = useState();
   const [error, setError] = useState(false);
-  const handleOptionChange = () => {
-    if (measureUnit === "gramas") {
-      setMeasureUnit("ml's");
-    } else {
-      setMeasureUnit("gramas");
-    }
+
+  const handleOptionChange = (value) => {
+    setItemName(value.label);
   };
-  const handleTypeChange = (event) => {
-    const type = event.target.value * 1;
-    setItemType(type);
-    switch (type) {
-      case 1:
-        setItemOptions(["Feijão", "Ervilha", "Lentilha", "Grão de bico"]);
-        setItemName("Feijão");
-        break;
-      case 3:
-        setItemOptions(["Arroz", "Aveia", "Milho", "Brócolis"]);
-        setItemName("Arroz");
-        break;
-      case 2:
-        setItemOptions(["Maçã", "Banana", "Mamão", "Uva"]);
-        setItemName("Maçã");
-        break;
-      case 4:
-        setItemOptions(["Alface", "Tomate", "Cenoura", "Brócolis"]);
-        setItemName("Alface");
-        break;
-    }
-  };
-  const onSubmit = () => {
-    return [itemName, measureUnit, mealQuantity];
-  };
+
   return (
     <div>
       <form>
         <fieldset>
-          <label htmlFor="itemType">Selecione o tipo de alimento: </label>
-          <select
-            name="itemType"
-            id="itemType"
-            value={itemType}
-            onChange={(event) => {
-              handleTypeChange(event);
-            }}
-          >
-            {foodTypes.map((item, index) => {
-              return (
-                <option key={index} value={index + 1}>
-                  {item}
-                </option>
-              );
-            })}
-          </select>
-        </fieldset>
-        <fieldset>
-          <label htmlFor="itemName">Selecione o nome do alimento: </label>
-          <select
-            name="itemName"
-            id="itemName"
-            value={itemName}
-            onChange={(event) => {
-              setItemName(event.target.value);
-              setError(false);
-            }}
-          >
-            {itemOptions.map((option) => {
-              return (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              );
-            })}
-          </select>
+          <label className="form-label" htmlFor="itemName">
+            Selecione o nome do alimento:{" "}
+            <FoodSelector onChange={handleOptionChange} />
+          </label>
         </fieldset>
         <fieldset className="meal-quantity-container">
-          <label htmlFor="gramas"> Sólido</label>
+          <label className="form-label">
+            {itemName !== undefined
+              ? `Digite a quantidade de ${itemName}`
+              : "Selecione um alimento"}
+          </label>
           <input
-            type="radio"
-            name="gramas"
-            id="gramas"
-            value="gramas"
-            checked={measureUnit === "gramas"}
-            onChange={(event) => {
-              setMeasureUnit(event.target.value);
-              handleOptionChange();
-            }}
-          />
-          <label htmlFor="liquid">Líquido</label>
-          <input
-            type="radio"
-            name="ml's"
-            id="ml's"
-            value="ml's"
-            checked={measureUnit === "ml's"}
-            onChange={(event) => {
-              setMeasureUnit(event.target.value);
-              handleOptionChange();
-            }}
-          />
-          <label>Digite a quantidade em {measureUnit}: </label>
-          <input
+            className="form-control"
             type="number"
             name="quantity"
             id="quantity"
@@ -126,17 +41,19 @@ function AddMealItem({ onItemSubmit }) {
               }
             }}
           />
-          {error && <div>Digite um valor válido</div>}
+          {error && (
+            <div className="invalid-feedback">Digite um valor válido</div>
+          )}
         </fieldset>
         <button
+          className="button"
           onClick={(event) => {
             event.preventDefault();
             if (!mealQuantity) {
               setError(true);
               return;
             }
-            const newItem = onSubmit();
-            onItemSubmit(event, newItem);
+            onItemSubmit(event, [itemName, mealQuantity]);
           }}
         >
           Cadastrar alimento

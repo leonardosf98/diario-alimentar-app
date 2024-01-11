@@ -17,16 +17,13 @@ function Root() {
   } else {
     mealsLS = localStorage.setItem("meals", "[]");
   }
-  const addMeal = (mealData) => {
-    setMeals((oldstate) => [...oldstate, mealData]);
-  };
   return loading ? (
     <p>Carregando</p>
   ) : (
-    <div>
+    <div className="main">
       <Header />
       <MealList meals={meals} />
-      <Link to={"/createMeal"} onAddMeal={addMeal}>
+      <Link className="addMeal" to={"/createMeal"}>
         Adicionar refeição
       </Link>
     </div>
