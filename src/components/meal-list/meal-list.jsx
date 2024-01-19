@@ -17,7 +17,6 @@ function MealList() {
     setMeals(removedItem);
     localStorage.setItem("meals", JSON.stringify(removedItem));
   };
-
   if (meals.length === 0) {
     return <div className="no-meals">Nenhuma refeição registrada</div>;
   } else {
@@ -25,43 +24,85 @@ function MealList() {
       <div>
         <h2 className="meals-title">Refeições</h2>
         <div className="meals-list">
-          {meals.map((item, index) => {
-            const formatedDate = item.mealDate.split("-").reverse().join("/");
-            return (
-              <div key={index} className="card mt-4">
-                <div className="card-header">
-                  {formatedDate} {item.mealTime}
-                </div>
-                <div className="card-body">
-                  <h5 className="card-title">{item.mealName}</h5>
-                  <p className="card-text"></p>
-                  <Link className="btn btn-primary" to={`/edit/${item.id}`}>
-                    Editar
-                  </Link>
-                  <button
-                    onClick={() => deleteMeal(item.id)}
-                    className="btn btn-danger ms-2"
+          {meals
+            .slice()
+            .reverse()
+            .map((item, index) => {
+              const modalId = `exampleModal-${item.id}`;
+              const formatedDate = item.mealDate.split("-").reverse().join("/");
+              return (
+                <div key={index} className="card mt-4">
+                  <div
+                    class="modal fade"
+                    id={modalId}
+                    tabindex="-1"
+                    aria-labelledby="exampleModalLabel"
+                    aria-hidden="true"
                   >
-                    Excluir
-                  </button>
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">
+                            {item.mealName}
+                          </h1>
+                          <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                          ></button>
+                        </div>
+                        <div class="modal-body d-flex justify-content-center">
+                          <ul className="list-group d-flex text-align-center">
+                            {item.mealItem.map((item) => {
+                              return (
+                                <li className="list-group-item">
+                                  <p>
+                                    {item.itemName} {item.quantity}
+                                    {item.measureUnit}
+                                  </p>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                        <div class="modal-footer">
+                          <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                          >
+                            Fechar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-header">
+                    {formatedDate} {item.mealTime}
+                  </div>
+                  <div className="card-body">
+                    <button
+                      data-bs-toggle="modal"
+                      data-bs-target={`#${modalId}`}
+                      className="card-title meal-btn"
+                    >
+                      {item.mealName}
+                    </button>
+                    <p className="card-text"></p>
+                    <Link className="btn btn-primary" to={`/edit/${item.id}`}>
+                      Editar
+                    </Link>
+                    <button
+                      onClick={() => deleteMeal(item.id)}
+                      className="btn btn-danger ms-2"
+                    >
+                      Excluir
+                    </button>
+                  </div>
                 </div>
-              </div>
-              /* //         <li key={item.id} className="list-group-item">
-      //           <h5 className="mb-1">{item.mealName}</h5>
-      //           <div className="d-flex w-100 justify-content-between">
-      //             <small>{item.mealTime}</small>
-      //             <small>{formatedDate}</small>
-      //           </div>
-      //           <div className="buttons-container">
-      //             <Link to={`/edit/${item.id}`}>Editar</Link>
-      //             <button
-      //               onClick={() => deleteMeal(item.id)}
-      //               className="delete-btn"
-      //             >
-      //               Excluir
-      //             </button> */
-            );
-          })}
+              );
+            })}
         </div>
       </div>
     );

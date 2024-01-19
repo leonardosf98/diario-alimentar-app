@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
+import "./food-selector.css";
 
 export default function FoodSelector({ onChange }) {
   const [categories, setCategories] = useState([]);
@@ -61,6 +62,7 @@ export default function FoodSelector({ onChange }) {
       options={categories}
       formatGroupLabel={formatGroupLabel}
       onChange={onChange}
+      style={{ minWidth: "300px", maxWidth: "300px" }}
     />
   );
 }

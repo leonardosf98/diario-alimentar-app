@@ -4,7 +4,7 @@ import "./add-meal-form.css";
 import AddMealItem from "../addMealItem/addMealItem";
 import Header from "../header/header";
 
-function AddMealForm({ onMealSubmit }) {
+function AddMealForm({ onMealSubmit, meal }) {
   const todayDate = {
     day: new Date().toLocaleString("pt-br").slice(0, 2),
     month: new Date().toLocaleString("pt-br").slice(3, 5),
@@ -12,12 +12,21 @@ function AddMealForm({ onMealSubmit }) {
   };
 
   const todayTime = new Date().toLocaleString("pt-br").slice(12, 17);
-  const [mealName, setMealName] = useState();
-  const [mealDate, setMealDate] = useState(
-    `${todayDate.year}-${todayDate.month}-${todayDate.day}`
-  );
-  const [mealTime, setMealTime] = useState(todayTime);
-  const [mealItem, setMealItem] = useState([]);
+
+  setMealItem(meal.mealItem);
+  if (meal) {
+    initialMealName = meal.mealName;
+    initialMealDate = meal.mealDate;
+    initialMealTime = meal.mealTime;
+  } else {
+    initialMealName = "";
+    initialMealDate = `${todayDate.year}-${todayDate.month}-${todayDate.day}`;
+    initialMealTime = todayTime;
+  }
+
+  const [mealName, setMealName] = useState(initialMealName);
+  const [mealDate, setMealDate] = useState(initialMealDate);
+  const [mealTime, setMealTime] = useState(initialMealTime);
   const [error, setError] = useState(false);
 
   const handleItemSubmit = (event, mealItemData) => {
@@ -25,16 +34,21 @@ function AddMealForm({ onMealSubmit }) {
     const newItem = {
       itemName: mealItemData[0],
       quantity: mealItemData[1],
+      measureUnit: mealItemData[2],
     };
     setMealItem((oldState) => [...oldState, newItem]);
   };
+
   useEffect(() => {
     setError(mealItem.length === 0);
   }, [mealItem]);
+
   return (
     <div className="body">
       <Header />
-      <Link to="/">Voltar</Link>
+      <Link to="/" className="goback-link btn-sm btn btn-primary">
+        Voltar
+      </Link>
       <form
         className="form"
         onSubmit={(event) => {
@@ -47,7 +61,7 @@ function AddMealForm({ onMealSubmit }) {
           }
         }}
       >
-        <div className="">
+        <div>
           <label className="form-label" htmlFor="meal-name">
             Selecione o nome da refeição:
           </label>
@@ -60,6 +74,7 @@ function AddMealForm({ onMealSubmit }) {
             onChange={(event) => {
               setMealName(event.target.value);
             }}
+            required
           >
             <option selected value="">
               Escolha um nome para sua refeição
@@ -101,20 +116,33 @@ function AddMealForm({ onMealSubmit }) {
             }}
           />
         </fieldset>
-        <div className="meal-item-container">
-          {mealItem.map((item) => {
-            return (
-              <div className="meal-item">{`${item.itemName}: ${item.quantity}`}</div>
-            );
-          })}
-        </div>
+        {mealItem.length > 0 ? (
+          <div className="list-group">
+            <li className="list-group-item list-group-item-action active">
+              Lista de alimentos
+            </li>
+            {mealItem
+              .slice()
+              .reverse()
+              .map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="list-group-item"
+                  >{`${item.itemName}: ${item.quantity} ${item.measureUnit}`}</div>
+                );
+              })}
+          </div>
+        ) : null}
         {error && (
           <p className="invalid-feedback">
             Você deve registrar pelo menos um alimento
           </p>
         )}
-        <AddMealItem onItemSubmit={handleItemSubmit}></AddMealItem>
-        <button type="submit">Cadastrar Refeição</button>
+        <AddMealItem onItemSubmit={handleItemSubmit} />
+        <button type="submit" className="btn btn-success">
+          Cadastrar Refeição
+        </button>
       </form>
     </div>
   );

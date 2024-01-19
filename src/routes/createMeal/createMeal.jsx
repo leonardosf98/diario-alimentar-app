@@ -12,7 +12,6 @@ function CreateMeal() {
           meals = [];
         }
         meals = JSON.parse(meals);
-        console.log(meals);
         let id = nanoid();
         meals.push({ ...mealData, id });
         localStorage.setItem("meals", JSON.stringify(meals));
