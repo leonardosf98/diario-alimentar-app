@@ -5,6 +5,7 @@ import AddMealItem from "../addMealItem/addMealItem";
 import Header from "../header/header";
 
 function AddMealForm({ onMealSubmit, meal }) {
+
   const todayDate = {
     day: new Date().toLocaleString("pt-br").slice(0, 2),
     month: new Date().toLocaleString("pt-br").slice(3, 5),
@@ -12,6 +13,7 @@ function AddMealForm({ onMealSubmit, meal }) {
   };
 
   const todayTime = new Date().toLocaleString("pt-br").slice(12, 17);
+
 
   setMealItem(meal.mealItem);
   if (meal) {
@@ -27,6 +29,7 @@ function AddMealForm({ onMealSubmit, meal }) {
   const [mealName, setMealName] = useState(initialMealName);
   const [mealDate, setMealDate] = useState(initialMealDate);
   const [mealTime, setMealTime] = useState(initialMealTime);
+
   const [error, setError] = useState(false);
 
   const handleItemSubmit = (event, mealItemData) => {
@@ -116,6 +119,7 @@ function AddMealForm({ onMealSubmit, meal }) {
             }}
           />
         </fieldset>
+
         {mealItem.length > 0 ? (
           <div className="list-group">
             <li className="list-group-item list-group-item-action active">
@@ -143,6 +147,7 @@ function AddMealForm({ onMealSubmit, meal }) {
         <button type="submit" className="btn btn-success">
           Cadastrar Refeição
         </button>
+
       </form>
     </div>
   );

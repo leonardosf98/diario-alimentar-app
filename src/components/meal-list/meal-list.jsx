@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./meal-list.css";
+
 import { Link } from "react-router-dom";
 
 function MealList() {
@@ -106,7 +107,14 @@ function MealList() {
         </div>
       </div>
     );
+
   }
+  return (
+    <div>
+      <h2>Refeições</h2>
+      <ul className="meals-list">{meals}</ul>
+    </div>
+  );
 }
 
 export default MealList;
