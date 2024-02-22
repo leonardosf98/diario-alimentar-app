@@ -1,12 +1,31 @@
 .meals-list {
   overflow-y: auto;
-  height: 200px;
+  max-height: 500px;
   list-style: none;
   align-items: center;
+  width: 300px;
 }
-.meal-shown-li {
+
+.delete-btn {
+  font-weight: 500;
+  color: #646cff;
+  border: 0;
+}
+.buttons-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  column-gap: 10px;
+  justify-content: space-between;
+}
+.meals-title {
+  font-size: 50px;
+}
+.meals-list li:nth-child(odd) {
+  background-color: rgb(159, 159, 159);
+}
+.list-group-item {
+  width: 100%;
+  background-color: transparent;
+}
+.no-meals {
+  font-weight: 500;
+  font-size: 20px;
 }
